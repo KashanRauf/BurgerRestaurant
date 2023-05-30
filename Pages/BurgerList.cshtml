@@ -1,0 +1,71 @@
+﻿@page
+@model BurgerRestaurant.Pages.BurgerListModel
+@{
+    ViewData["Title"] = "Burger List";
+}
+
+<h2>Burger List</h2>
+
+<!-- Form for new burgers -->
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="NewBurger.Name" class="control-label"></label>
+        <input asp-for="NewBurger.Name" class="form-control">
+        <span asp-validation-for="NewBurger.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NewBurger.Side" class="control-label"></label>
+        <select asp-for="NewBurger.Side" class="form-control" id="BurgerSide">
+            <option>-- Select Side --</option>
+            <option>Fries</option>
+            <option>Salad</option>
+            <option>None</option>
+        </select>
+        <span asp-validation-for="NewBurger.Side" class="text-danger"></span>
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="NewBurger.IsVegetarian" /> @Html.DisplayNameFor(model => model.NewBurger.IsVegetarian)
+    </div>
+    <div class="form-group">
+        <label asp-for="NewBurger.Price" class="control-label"></label>
+        <input asp-for="NewBurger.Price" class="form-control">
+        <span asp-validation-for="NewBurger.Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<!-- Existing burgers listed here -->
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Side</th>
+            <th scope="col">Vegetarian</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var burger in Model.BurgerList)
+        {
+            <tr>
+                <td>@burger.Name</td>
+                <td>@($"{burger.Price:C}")</td>
+                <td>@burger.Side</td>
+                <td>@(burger.IsVegetarian ? "Yes" : "No")</td>
+                <td>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@burger.ID">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
